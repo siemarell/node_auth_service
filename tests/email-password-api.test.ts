@@ -7,7 +7,7 @@ import { User } from "../src/models/User";
 const email = "sergey@sizdev.com";
 const password = "abracadabra";
 
-describe("API", () => {
+describe("Email Password API", () => {
   beforeAll(async () => {
     await mongoose.connect(testMongoUrl, {
       useNewUrlParser: true,

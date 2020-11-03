@@ -1,15 +1,17 @@
 import { RequestHandler, Response } from "express";
 import emailPasswordService from "../services/emailPasswordService";
-import { getOrCreateUserViaSlackOAuthData } from "../services/slackService";
+import slackService from "../services/slackService";
 import { generateNewTokenPair, refreshTokenPair, TTokenPair } from "../services/jwtService";
 
-export const slackAuth: RequestHandler<null> = async (req, res, next) => {
-  const userOrError = await getOrCreateUserViaSlackOAuthData(req.body);
-  if ("error" in userOrError) {
-    res.status(400).send(userOrError.error);
-  } else {
-    respondWithToken(res, generateNewTokenPair(userOrError.result));
-  }
+export const slackAuthCallback: RequestHandler<null> = async (req, res, next) => {
+  console.log("asdsad");
+  const userOrError = await slackService.getOrCreateUserViaSlackOAuthData(req.body);
+  res.send("ok");
+  // if ("error" in userOrError) {
+  //   res.status(400).send(userOrError.error);
+  // } else {
+  //   respondWithToken(res, generateNewTokenPair(userOrError.result));
+  // }
 };
 
 export const refreshToken: RequestHandler = async (req, res, next) => {
@@ -19,16 +21,6 @@ export const refreshToken: RequestHandler = async (req, res, next) => {
   } else {
     respondWithToken(res, tokenPairOrError.result);
   }
-};
-
-export const signUpWithEmailAndPassword: RequestHandler = async (req, res, next) => {
-  throw new Error("Not implemented");
-  const userOrError = await emailPasswordService.createUser(req.body.email, req.body.password);
-  // if ("error" in userOrError) {
-  //   res.status(400).send(userOrError.error);
-  // } else {
-  //   respondWithToken(res, generateNewTokenPair(userOrError.result));
-  // }
 };
 
 export const signInWithEmailAndPassword: RequestHandler = async (req, res, next) => {
