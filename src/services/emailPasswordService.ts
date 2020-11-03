@@ -1,13 +1,22 @@
-import { IUser, User } from "../models/User";
+import { IUser, IUserDocument, User } from "../models/User";
 import { UserOrError, VoidOrError } from "../types";
+import { IEmailPasswordAuthProvider } from "../models/EmailPasswordAuthProvider";
+
+type TUserDocumentWithEmailPassProvider = IUserDocument & {
+  authProviders: {
+    emailPassword: IEmailPasswordAuthProvider;
+  };
+};
 
 export class EmailPasswordService {
-  findByEmail(email: string): Promise<IUser | null> {
-    return User.findOne({ "authProviders.emailPassword.email": email }).exec();
+  private static _findByEmail(email: string): Promise<TUserDocumentWithEmailPassProvider | null> {
+    return User.findOne({
+      "authProviders.emailPassword.email": email,
+    }).exec() as Promise<TUserDocumentWithEmailPassProvider | null>;
   }
 
   async createUser(email: string, password: string): Promise<UserOrError> {
-    if ((await this.findByEmail(email)) != null) {
+    if ((await EmailPasswordService._findByEmail(email)) != null) {
       return { error: { code: 300, message: `email ${email} already in use` } };
     }
     const user = new User({
@@ -17,12 +26,30 @@ export class EmailPasswordService {
     return { result: user.toJSON() };
   }
 
-  changePassword(email: string, oldPassword: string, newPassword: string): Promise<VoidOrError> {
-    throw new Error("Not implemented");
+  async changePassword(
+    email: string,
+    oldPassword: string,
+    newPassword: string
+  ): Promise<VoidOrError> {
+    const user = await EmailPasswordService._findByEmail(email);
+    if (user != null) {
+      if (await user.authProviders.emailPassword.validatePassword(oldPassword)) {
+        user.authProviders.emailPassword.password = newPassword;
+        await user.save();
+        return { result: void 0 };
+      }
+    }
+    return { error: { code: 302, message: `Incorrect username or password` } };
   }
 
-  authenticateViaEmailAndPassword(email: string, password: string): Promise<UserOrError> {
-    throw new Error("Not implemented");
+  async getUserByEmailAndPassword(email: string, password: string): Promise<UserOrError> {
+    const user = await EmailPasswordService._findByEmail(email);
+    if (user != null) {
+      if (await user.authProviders.emailPassword.validatePassword(password)) {
+        return { result: user.toJSON() };
+      }
+    }
+    return { error: { code: 302, message: `Incorrect username or password` } };
   }
 }
 

@@ -1,5 +1,3 @@
-import { availableProviders } from "./models/User";
-
 export function loadVar(name: string): string;
 export function loadVar<T extends boolean>(
   name: string,
@@ -12,6 +10,8 @@ export function loadVar(name: string, optional?: unknown): string | undefined {
   }
   return result;
 }
+
+export const availableProviders = ["slack", "emailPassword"];
 
 export function parseEnabledProviders(): Set<"slack" | "emailPassword"> {
   const result = new Set<"slack" | "emailPassword">();

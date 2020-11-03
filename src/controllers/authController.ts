@@ -32,7 +32,7 @@ export const signUpWithEmailAndPassword: RequestHandler = async (req, res, next)
 };
 
 export const signInWithEmailAndPassword: RequestHandler = async (req, res, next) => {
-  const userOrError = await emailPasswordService.authenticateViaEmailAndPassword(
+  const userOrError = await emailPasswordService.getUserByEmailAndPassword(
     req.body.email,
     req.body.password
   );
