@@ -20,7 +20,7 @@ export function parseEnabledProviders(): Set<"slack" | "emailPassword"> {
     if (!availableProviders.includes(provider)) {
       throw new Error(`Unknown auth provider: ${provider}`);
     }
-    enabledProviders.push(provider);
+    result.add(provider as "slack" | "emailPassword");
   }
   if (enabledProviders.length === 0) {
     throw new Error(`Should have at least one enabled provider`);
