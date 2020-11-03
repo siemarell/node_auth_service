@@ -52,7 +52,7 @@ export const changePassword: RequestHandler = async (req, res, next) => {
   if ("error" in resultOrError) {
     res.status(400).send(resultOrError.error);
   } else {
-    res.send("OK");
+    res.json({ ok: true });
   }
 };
 

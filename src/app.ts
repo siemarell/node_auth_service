@@ -23,7 +23,7 @@ app.post("/sign_in", authController.signInWithEmailAndPassword);
 app.post("/password_reset", authController.requestPasswordReset);
 // private
 app.post("/create_user", authController.createUser);
-app.delete("/change_password", authController.changePassword);
+app.post("/change_password", authController.changePassword);
 
 if (process.env.NODE_ENV === "development") {
   app.use(errorHandler);
