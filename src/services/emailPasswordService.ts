@@ -1,10 +1,10 @@
 import { IUser, IUserDocument, User } from "../models/User";
 import { UserOrError, VoidOrError } from "../types";
-import { IEmailPasswordAuthProvider } from "../models/EmailPasswordAuthProvider";
+import { IEmailPasswordProvider } from "../models/EmailPasswordAuthProvider";
 
 type TUserDocumentWithEmailPassProvider = IUserDocument & {
   authProviders: {
-    emailPassword: IEmailPasswordAuthProvider;
+    emailPassword: IEmailPasswordProvider;
   };
 };
 

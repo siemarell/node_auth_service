@@ -1,5 +1,4 @@
 import { IUser } from "./models/User";
-
 export type ResultOrError<T, U> = { result: T } | { error: U };
 export type GenericError = { code: number; message: string };
 

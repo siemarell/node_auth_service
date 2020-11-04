@@ -1,11 +1,13 @@
 import { Router } from "express";
 import * as authController from "./controllers/authController";
+import { slackAuth, slackAuthCallback } from "./controllers/slackController";
 
 const router = Router();
 
 router.post("/refresh_token/", authController.refreshToken);
 
-router.get("/slack/auth/callback", authController.slackAuthCallback);
+router.get("/auth/slack", slackAuth);
+router.get("/auth/slack/callback", slackAuthCallback);
 
 // emailPassword endpoints
 // public

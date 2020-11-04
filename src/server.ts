@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 import { app } from "./app";
-import { mongoUrl, port } from "./config";
+import { MONGO_URL, PORT } from "./config";
 
 // Connect to MongoDB
 // mongoose.Promise = bluebird;
 
 mongoose
-  .connect(mongoUrl, {
+  .connect(MONGO_URL, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -20,6 +20,6 @@ mongoose
     // process.exit();
   });
 
-app.listen(port ?? 5000, () => {
-  console.log("🚀 Server ready at: http://localhost:" + port);
+app.listen(PORT ?? 5000, () => {
+  console.log("🚀 Server ready at: http://localhost:" + PORT);
 });

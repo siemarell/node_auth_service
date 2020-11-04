@@ -3,17 +3,6 @@ import emailPasswordService from "../services/emailPasswordService";
 import slackService from "../services/slackService";
 import { generateNewTokenPair, refreshTokenPair, TTokenPair } from "../services/jwtService";
 
-export const slackAuthCallback: RequestHandler<null> = async (req, res, next) => {
-  console.log("asdsad");
-  const userOrError = await slackService.getOrCreateUserViaSlackOAuthData(req.body);
-  res.send("ok");
-  // if ("error" in userOrError) {
-  //   res.status(400).send(userOrError.error);
-  // } else {
-  //   respondWithToken(res, generateNewTokenPair(userOrError.result));
-  // }
-};
-
 export const refreshToken: RequestHandler = async (req, res, next) => {
   const tokenPairOrError = refreshTokenPair(req.cookies["jrt"]);
   if ("error" in tokenPairOrError) {
@@ -61,7 +50,7 @@ export const createUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-function respondWithToken(res: Response, { accessToken, refreshToken }: TTokenPair) {
+export function respondWithToken(res: Response, { accessToken, refreshToken }: TTokenPair) {
   // const { accessToken, refreshToken } = generateNewTokenPair(user);
   res.cookie("jrt", refreshToken);
   res.json(accessToken);

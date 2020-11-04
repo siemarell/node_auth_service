@@ -8,9 +8,14 @@ export type TTokenPair = {
   refreshToken: string;
 };
 
+const payloadFromUser = (user: IUser) => ({
+  id: user.id,
+});
+
 export function generateNewTokenPair(user: IUser): TTokenPair {
-  const accessToken = jwt.sign(user, jwtSecret, { expiresIn: "15m" });
-  const refreshToken = jwt.sign(user, jwtSecret, { expiresIn: "7d" });
+  const payload = payloadFromUser(user);
+  const accessToken = jwt.sign(payload, jwtSecret, { expiresIn: "15m" });
+  const refreshToken = jwt.sign(payload, jwtSecret, { expiresIn: "7d" });
   return { accessToken, refreshToken };
 }
 
@@ -18,10 +23,7 @@ export function refreshTokenPair(refreshToken: string): ResultOrError<TTokenPair
   try {
     const data = jwt.verify(refreshToken, jwtSecret);
     return {
-      result: {
-        accessToken: data as any,
-        refreshToken: data as any,
-      },
+      result: generateNewTokenPair(data as IUser),
     };
   } catch (e) {
     return {

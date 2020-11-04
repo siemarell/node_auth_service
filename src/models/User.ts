@@ -1,11 +1,8 @@
 import mongoose, { Document } from "mongoose";
 import * as uuid from "uuid";
-import {
-  EmailPasswordProviderSchema,
-  IEmailPasswordAuthProvider,
-} from "./EmailPasswordAuthProvider";
+import { EmailPasswordProviderSchema, IEmailPasswordProvider } from "./EmailPasswordAuthProvider";
 
-export interface ISlackAuthProvider {
+export interface ISlackProvider {
   userId: string;
   teamId: string;
   accessToken: string;
@@ -23,8 +20,8 @@ const SlackAuthProvideSchema = new mongoose.Schema(
 );
 
 type TAuthProviders = {
-  slack?: ISlackAuthProvider;
-  emailPassword?: IEmailPasswordAuthProvider;
+  slack?: ISlackProvider;
+  emailPassword?: IEmailPasswordProvider;
 };
 
 export interface IUser {

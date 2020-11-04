@@ -2,15 +2,15 @@ import mongoose, { Document } from "mongoose";
 import bcrypt from "bcryptjs";
 import { saltWorkFactor } from "../config";
 
-export interface IEmailPasswordAuthProvider {
+export interface IEmailPasswordProvider {
   email: string;
   password: string;
   validatePassword: (password: string) => Promise<boolean>;
 }
 
-export type IEmailPasswordProviderDocument = Document & IEmailPasswordAuthProvider;
+export type IEmailPasswordProviderDocument = Document & IEmailPasswordProvider;
 
-export const EmailPasswordProviderSchema = new mongoose.Schema<IEmailPasswordAuthProvider>(
+export const EmailPasswordProviderSchema = new mongoose.Schema<IEmailPasswordProvider>(
   {
     email: { type: String, required: true, index: { unique: true } },
     password: { type: String, required: true },
